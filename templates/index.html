@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOA | Team 6</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('/static/foa1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #fff;
+            text-align: center;
+        }
+
+        #container {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            max-width: 600px; /* Set a maximum width for the container */
+            width: 100%;
+        }
+
+        h1 {
+            color: #f4f4f4;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        label {
+            font-size: 16px;
+            margin-right: 10px;
+            color: #fff;
+        }
+
+        #urlInput {
+            width: 300px;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* Media query for responsive design */
+        @media (max-width: 600px) {
+            #urlInput {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Phishing Attack Detector</h1>
+    <div id="container">
+        
+        <p>
+            Phishing attacks are a serious threat to online security. In today's digital age,
+            people are increasingly vulnerable to phishing attempts that aim to steal sensitive
+            information such as login credentials and financial details.
+        </p>
+        <p>
+            Our Phishing Attack Detector helps protect you from such attacks by classifying URLs
+            as either phishing or legitimate. Simply enter a URL, and our system will analyze it
+            to provide you with valuable information about its safety.
+        </p>
+        <label for="urlInput">Enter URL:</label>
+        <input type="text" id="urlInput" placeholder="Enter a URL...">
+        <button onclick="classifyURL()">Classify</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function classifyURL() {
+            var url = document.getElementById("urlInput").value;
+
+            fetch('/classify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'url=' + encodeURIComponent(url),
+            })
+            .then(response => response.json())
+            .then(data => {
+                var resultDiv = document.getElementById("result");
+                if (data.result === 'phishing') {
+                    resultDiv.innerText = 'Phishing Alert: The URL \'' + url + '\' is identified as a phishing website.';
+                    resultDiv.style.color = 'red';
+                } else {
+                    resultDiv.innerText = 'Safe Website: The URL \'' + url + '\' is identified as a legitimate website.';
+                    resultDiv.style.color = 'green';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
